@@ -1,8 +1,7 @@
 /*
- * YAFFS: Yet another FFS. A NAND-flash specific file system.
- * yaffsinterface.h: Interface to the guts of yaffs.
+ * YAFFS: Yet another Flash File System . A NAND-flash specific file system.
  *
- * Copyright (C) 2002 Aleph One Ltd.
+ * Copyright (C) 2002-2007 Aleph One Ltd.
  *   for Toby Churchill Ltd and Brightstar Engineering
  *
  * Created by Charles Manning <charles@aleph1.co.uk>
@@ -12,14 +11,11 @@
  * published by the Free Software Foundation.
  *
  * Note: Only YAFFS headers are LGPL, YAFFS C code is covered by GPL.
- *
  */
- 
+
 #ifndef __YAFFSINTERFACE_H__
 #define __YAFFSINTERFACE_H__
-
 
 int yaffs_Initialise(unsigned nBlocks);
 
 #endif
-
