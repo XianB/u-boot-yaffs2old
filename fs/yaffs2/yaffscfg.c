@@ -115,7 +115,7 @@ static yaffsfs_DeviceConfiguration yaffsfs_config[] = {
 int yaffs_StartUp(void)
 {
 	struct mtd_info *mtd = &nand_info[0];
-	int yaffsVersion = 1;
+	int yaffsVersion = 2;
 	int nBlocks;
 
 	yaffs_Device *flashDev = calloc(1, sizeof(yaffs_Device));
@@ -162,6 +162,7 @@ int yaffs_StartUp(void)
 #endif
 
 		// /flash
+		
 	flashDev->nReservedBlocks = 5;
 //  flashDev->nShortOpCaches = (options.no_cache) ? 0 : 10;
 	flashDev->nShortOpCaches = 10; // Use caches
@@ -176,27 +177,28 @@ int yaffs_StartUp(void)
 		flashDev->spareBuffer = YMALLOC(mtd->oobsize);
 		flashDev->isYaffs2 = 1;
 //#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-//		flashDev->nDataBytesPerChunk = mtd->writesize;
-//		flashDev->nChunksPerBlock = mtd->erasesize / mtd->writesize;
-//#else
-		flashDev->nDataBytesPerChunk = mtd->oobblock;
+#if 0
+		flashDev->nDataBytesPerChunk = mtd->writesize;
+		flashDev->nChunksPerBlock = mtd->erasesize / mtd->writesize;
+#else
+		//flashDev->nDataBytesPerChunk = mtd->oobblock;
+		flashDev->nDataBytesPerChunk = 2048;
 		flashDev->nChunksPerBlock = mtd->erasesize / mtd->oobblock;
-//#endif
-		nBlocks = mtd->size / mtd->erasesize;
+#endif
+		//nBlocks = mtd->size / mtd->erasesize;
+		nBlocks = 200 ;
 
 		flashDev->nCheckpointReservedBlocks = 10;
-		flashDev->startBlock = 100;
+		flashDev->startBlock = 50;
 		flashDev->endBlock = nBlocks - 1;
 	}
 	else
 	{
 		flashDev->writeChunkToNAND = nandmtd_WriteChunkToNAND;
 		flashDev->readChunkFromNAND = nandmtd_ReadChunkFromNAND;
-		flashDev->markNANDBlockBad = NULL;
-		flashDev->queryNANDBlock = NULL;
 		flashDev->isYaffs2 = 0;
 		nBlocks = mtd->size / (YAFFS_CHUNKS_PER_BLOCK * YAFFS_BYTES_PER_CHUNK);
-		flashDev->startBlock = 100;
+		flashDev->startBlock = 320;
 		flashDev->endBlock = nBlocks - 1;
 		flashDev->nChunksPerBlock = YAFFS_CHUNKS_PER_BLOCK;
 		flashDev->nDataBytesPerChunk = YAFFS_BYTES_PER_CHUNK;
@@ -225,9 +227,8 @@ void make_a_file(char *yaffsName,char bval,int sizeOfFile)
 		return;
 	}
 
-	memset(buffer,'a',100);
+	memset(buffer,bval,100);
 
-	
 	do{
 		i = sizeOfFile;
 		if(i > 100) i = 100;

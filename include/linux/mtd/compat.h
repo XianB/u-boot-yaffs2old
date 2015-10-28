@@ -20,11 +20,6 @@
 #define kmalloc(size, flags)	malloc(size)
 #define kfree(ptr)		free(ptr)
 
-
-
-#define KERNEL_VERSION(a,b,c)	(((a) << 16) + ((b) << 8) + (c))
-
-
 /*
  * ..and if you can't take the strict
  * types, you can specify one yourself.

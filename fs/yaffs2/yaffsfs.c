@@ -441,12 +441,10 @@ int yaffs_open(const char *path, int oflag, int mode)
 			dir = yaffsfs_FindDirectory(NULL,path,&name,0);
 			if(dir)
 			{
-				printf("file yaffsfs.c line: 444 dir found! :%s\n", name);
 				obj = yaffs_MknodFile(dir,name,mode,0,0);
 			}
 			else
 			{
-				printf("file yaffsfs.c line 449: dir not found!\n");
 				yaffsfs_SetError(-ENOTDIR);
 			}
 		}
@@ -470,9 +468,6 @@ int yaffs_open(const char *path, int oflag, int mode)
 		}
 		else
 		{
-			if (!obj) {
-				printf("file yaffsfs.c line 474: obj can not be create!\n");
-			}
 			yaffsfs_PutHandle(handle);
 			if(!errorReported)
 			{
@@ -1049,7 +1044,6 @@ int yaffs_mount(const char *path)
 		if(!dev->isMounted)
 		{
 			result = yaffs_GutsInitialise(dev);
-			printf("after mount : nErasedBlock: %d\n\n", dev->nErasedBlocks);
 			if(result == YAFFS_FAIL)
 			{
 				// todo error - mount failed
