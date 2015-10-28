@@ -105,8 +105,11 @@ int yaffs_QueryInitialBlockState(yaffs_Device * dev,
 {
 	blockNo -= dev->blockOffset;
 
-	if (dev->queryNANDBlock)
+	if (dev->queryNANDBlock) {
+
+		printf("mtdif2 called!\n");
 		return dev->queryNANDBlock(dev, blockNo, state, sequenceNumber);
+	}
 	else
 		return yaffs_TagsCompatabilityQueryNANDBlock(dev, blockNo,
 							     state,

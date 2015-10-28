@@ -2108,6 +2108,7 @@ static yaffs_Object *yaffs_MknodObject(yaffs_ObjectType type,
 	YCHAR *str = NULL;
 
 	yaffs_Device *dev = parent->myDev;
+	printf("yaffs_guts.c  -- line 2111: nerasedBlocks: %d\n", dev->nErasedBlocks);
 
 	/* Check if the entry exists. If it does then fail the call since we don't want a dup.*/
 	if (yaffs_FindObjectByName(parent, name)) {
@@ -2124,6 +2125,9 @@ static yaffs_Object *yaffs_MknodObject(yaffs_ObjectType type,
 		}
 	}
 
+	if (!in) {
+		printf("file yaffs_guts.c -- line 2129: cannot create in object\n");
+	}
 
 
 	if (in) {

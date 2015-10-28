@@ -34,7 +34,8 @@
 #include <asm/errno.h>
 #include <nand.h>
 
-#undef CFG_FCM_DEBUG
+//#undef CFG_FCM_DEBUG
+#define CFG_FCM_DEBUG
 #define CFG_FCM_DEBUG_LVL 1
 #ifdef CFG_FCM_DEBUG
 #define FCM_DEBUG(n, args...)				\
@@ -72,6 +73,11 @@ struct fcm_nand {
 
 
 /* These map to the positions used by the FCM hardware ECC generator */
+
+/* Small Page FLASH with FMR[ECCM] = 0 */
+static struct nand_oobinfo nooobinfo = { /* TODO */
+	.useecc = 0, /* MTD_NANDECC_PLACEONLY, */
+};
 
 /* Small Page FLASH with FMR[ECCM] = 0 */
 static struct nand_oobinfo fcm_oob_sp_eccm0 = { /* TODO */
@@ -856,9 +862,13 @@ int board_nand_init(struct nand_chip *nand)
 	/* If CS Base Register selects full hardware ECC then use it */
 	if (((lbc->bank[bank].br & BR_DECC) >> BR_DECC_SHIFT) == 2) {
 		/* put in small page settings and adjust later if needed */
-		nand->eccmode = NAND_ECC_HW3_512;
+		nand->eccmode = NAND_ECC_NONE;
+		printf("eccmode == NAND_ECC_NONE\n");
 		nand->autooob = (fcm->fmr & FMR_ECCM) ?
 				&fcm_oob_sp_eccm1 : &fcm_oob_sp_eccm0;
+		if (nand->autooob)
+			printf("nand.c --- line 863 nand->autooob: %d\n");
+		nand->autooob = &nooobinfo;
 		nand->calculate_ecc = fcm_calculate_ecc;
 		nand->correct_data = fcm_correct_data;
 		nand->enable_hwecc = fcm_enable_hwecc;

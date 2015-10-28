@@ -346,8 +346,12 @@ static int nand_verify_buf(struct mtd_info *mtd, const u_char *buf, int len)
 	struct nand_chip *this = mtd->priv;
 
 	for (i=0; i<len; i++)
-		if (buf[i] != readb(this->IO_ADDR_R))
+		if (buf[i] != readb(this->IO_ADDR_R)) {
+			printf("i:%d, buf[%d]: %x\n", i, i, buf[i]);
 			return -EFAULT;
+		} else {
+			printf("verify_no error\n");
+		}
 
 	return 0;
 }
@@ -407,8 +411,13 @@ static int nand_verify_buf16(struct mtd_info *mtd, const u_char *buf, int len)
 	len >>= 1;
 
 	for (i=0; i<len; i++)
-		if (p[i] != readw(this->IO_ADDR_R))
+		if (p[i] != readw(this->IO_ADDR_R)) {
+
 			return -EFAULT;
+			printf("verrify_buf16... i:%d, buf[%d]: %x\n", i, i, buf[i]);
+		} {
+			printf("verify no error!\n");
+		}
 
 	return 0;
 }
@@ -2469,6 +2478,7 @@ int nand_scan (struct mtd_info *mtd, int maxchips)
 	if (!this->autooob) {
 		/* Select the appropriate default oob placement scheme for
 		 * placement agnostic filesystems */
+		printf("nand_base.c -- line 2478: select autooob: %d\n", mtd->oobsize);
 		switch (mtd->oobsize) {
 		case 8:
 			this->autooob = &nand_oob_8;
@@ -2599,7 +2609,7 @@ int nand_scan (struct mtd_info *mtd, int maxchips)
 	/* Fill in remaining MTD driver data */
 	mtd->type = MTD_NANDFLASH;
 	mtd->flags = MTD_CAP_NANDFLASH | MTD_ECC;
-	mtd->ecctype = MTD_ECC_SW;
+	mtd->ecctype = MTD_ECC_NONE;
 	mtd->erase = nand_erase;
 	mtd->point = NULL;
 	mtd->unpoint = NULL;
