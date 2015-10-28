@@ -115,7 +115,7 @@ static yaffsfs_DeviceConfiguration yaffsfs_config[] = {
 int yaffs_StartUp(void)
 {
 	struct mtd_info *mtd = &nand_info[0];
-	int yaffsVersion = 2;
+	int yaffsVersion = 1;
 	int nBlocks;
 
 	yaffs_Device *flashDev = calloc(1, sizeof(yaffs_Device));
@@ -162,7 +162,6 @@ int yaffs_StartUp(void)
 #endif
 
 		// /flash
-		
 	flashDev->nReservedBlocks = 5;
 //  flashDev->nShortOpCaches = (options.no_cache) ? 0 : 10;
 	flashDev->nShortOpCaches = 10; // Use caches
@@ -176,20 +175,17 @@ int yaffs_StartUp(void)
 		flashDev->queryNANDBlock = nandmtd2_QueryNANDBlock;
 		flashDev->spareBuffer = YMALLOC(mtd->oobsize);
 		flashDev->isYaffs2 = 1;
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 0
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 		flashDev->nDataBytesPerChunk = mtd->writesize;
 		flashDev->nChunksPerBlock = mtd->erasesize / mtd->writesize;
 #else
-		//flashDev->nDataBytesPerChunk = mtd->oobblock;
-		flashDev->nDataBytesPerChunk = 2048;
+		flashDev->nDataBytesPerChunk = mtd->oobblock;
 		flashDev->nChunksPerBlock = mtd->erasesize / mtd->oobblock;
 #endif
-		//nBlocks = mtd->size / mtd->erasesize;
-		nBlocks = 200 ;
+		nBlocks = mtd->size / mtd->erasesize;
 
 		flashDev->nCheckpointReservedBlocks = 10;
-		flashDev->startBlock = 50;
+		flashDev->startBlock = 0;
 		flashDev->endBlock = nBlocks - 1;
 	}
 	else
@@ -198,7 +194,7 @@ int yaffs_StartUp(void)
 		flashDev->readChunkFromNAND = nandmtd_ReadChunkFromNAND;
 		flashDev->isYaffs2 = 0;
 		nBlocks = mtd->size / (YAFFS_CHUNKS_PER_BLOCK * YAFFS_BYTES_PER_CHUNK);
-		flashDev->startBlock = 320;
+		flashDev->startBlock = 1;
 		flashDev->endBlock = nBlocks - 1;
 		flashDev->nChunksPerBlock = YAFFS_CHUNKS_PER_BLOCK;
 		flashDev->nDataBytesPerChunk = YAFFS_BYTES_PER_CHUNK;

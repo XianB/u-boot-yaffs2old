@@ -22,6 +22,19 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+
+#define YAFFS2_DEBUG
+
+#ifdef YAFFS2_DEBUG
+#define YD_LEVEL 5
+#define YD(level, str) if (level < YD_LEVEL) printf("%s", str)
+#else
+#define YD(level, str) 
+#endif
+
+
+
+
 /*
  * High Level Configuration Options
  */

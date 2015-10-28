@@ -30,20 +30,13 @@ COBJS-$(CONFIG_YAFFS2) := \
 SRCS    := $(COBJS-y:.o=.c)
 OBJS    := $(addprefix $(obj),$(COBJS-y))
 
-# -DCONFIG_YAFFS_NO_YAFFS1
-CFLAGS +=    -DCONFIG_YAFFS_DIRECT -DCONFIG_YAFFS_SHORT_NAMES_IN_RAM -DCONFIG_YAFFS_YAFFS2 -DNO_Y_INLINE -DLINUX_VERSION_CODE=0x20622 
+# -DCONFIG_YAFFS_NO_YAFFS1 -DCONFIG_YAFFS_YAFFS2
+CFLAGS +=    -DCONFIG_YAFFS_DIRECT -DCONFIG_YAFFS_SHORT_NAMES_IN_RAM -DLINUX_VERSION_CODE=0x20500 -DCONFIG_YAFFS_YAFFS2
 
 all:  $(LIB)
 
 $(LIB): $(obj).depend $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
-
-#.PHONY: clean distclean
-#clean:
-#	rm -f $(OBJS)
-
-#distclean:  clean
-#	rm -f $(LIB) core *.bak .depend
 
 #########################################################################
 
