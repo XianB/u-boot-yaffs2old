@@ -165,7 +165,7 @@ int yaffs_StartUp(void)
 	flashDev->nReservedBlocks = 5;
 //  flashDev->nShortOpCaches = (options.no_cache) ? 0 : 10;
 	flashDev->nShortOpCaches = 10; // Use caches
-	flashDev->useNANDECC = 0; // do not use YAFFS's ECC
+	flashDev->useNANDECC = 1; // do not use YAFFS's ECC
 
 	if (yaffsVersion == 2)
 	{

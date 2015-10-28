@@ -998,6 +998,7 @@ static int nand_verify_pages (struct mtd_info *mtd, struct nand_chip *this, int 
 	/* Send command to read back the first page */
 	this->cmdfunc (mtd, NAND_CMD_READ0, 0, page);
 
+	//注意，这里的eccsteps好像挺重要的，我们的ecc不是连续的，而这里的eccsteps不知道是否要求是连续的
 	for(;;) {
 		for (j = 0; j < eccsteps; j++) {
 			/* Loop through and verify the data */

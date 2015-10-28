@@ -89,6 +89,14 @@ static struct nand_oobinfo fcm_oob_sp_eccm1 = { /* TODO */
 	.oobfree = { {0, 5}, {6, 2}, {11, 5} }
 };
 
+struct nand_oobinfo yaffs_oobinfo = {
+	.useecc = MTD_NANDECC_PLACE,
+	.eccbytes = 6,
+	.eccpos = { 8, 9, 10, 13, 14, 15}
+};
+
+
+
 /* Large Page FLASH with FMR[ECCM] = 0 */
 static struct nand_oobinfo fcm_oob_lp_eccm0 = {
 	.useecc = MTD_NANDECC_AUTOPL_USR, /* MTD_NANDECC_PLACEONLY, */
@@ -856,9 +864,14 @@ int board_nand_init(struct nand_chip *nand)
 	/* If CS Base Register selects full hardware ECC then use it */
 	if (((lbc->bank[bank].br & BR_DECC) >> BR_DECC_SHIFT) == 2) {
 		/* put in small page settings and adjust later if needed */
-		nand->eccmode = NAND_ECC_HW3_512;
+		nand->eccmode = NAND_ECC_HW6_512;
+#ifdef YAFFS2_DEBUG
+		nand->autooob = &yaffs_oobinfo;
+		YD(1, "choose yaffs_oobinfo struct.\n");
+#else
 		nand->autooob = (fcm->fmr & FMR_ECCM) ?
 				&fcm_oob_sp_eccm1 : &fcm_oob_sp_eccm0;
+#endif
 		nand->calculate_ecc = fcm_calculate_ecc;
 		nand->correct_data = fcm_correct_data;
 		nand->enable_hwecc = fcm_enable_hwecc;
