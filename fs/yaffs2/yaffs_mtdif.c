@@ -31,7 +31,8 @@ const char *yaffs_mtdif_c_version =
 static struct nand_oobinfo yaffs_oobinfo = {
 	.useecc = 1,
 	.eccbytes = 6,
-	.eccpos = {8, 9, 10, 13, 14, 15}
+	.eccpos = {8, 9, 10, 13, 14, 15},
+	.oobfree = { {0,8}, {11,2} }
 };
 
 static struct nand_oobinfo yaffs_noeccinfo = {

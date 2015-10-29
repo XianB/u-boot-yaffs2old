@@ -318,7 +318,7 @@
 #define CONFIG_MTD_NAND_VERIFY_WRITE
 
 #define CFG_BR1_PRELIM		(CFG_NAND_BASE | \
-				 (2 << BR_DECC_SHIFT) |	/* Use HW ECC */ \
+				/* (2 << BR_DECC_SHIFT) |*/	/* Use HW ECC */ \
 				 BR_PS_8 |		/* Port Size = 8 bit */ \
 				 BR_MS_FCM |		/* MSEL = FCM */ \
 				 BR_V)			/* valid */
