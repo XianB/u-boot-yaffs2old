@@ -22,6 +22,19 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+
+#define YAFFS2_DEBUG
+
+#ifdef YAFFS2_DEBUG
+#define YD_LEVEL 5
+#define YD(level, str) if (level < YD_LEVEL) printf("%s", str)
+#else
+#define YD(level, str) 
+#endif
+
+
+
+
 /*
  * High Level Configuration Options
  */
@@ -305,7 +318,7 @@
 #define CONFIG_MTD_NAND_VERIFY_WRITE
 
 #define CFG_BR1_PRELIM		(CFG_NAND_BASE | \
-				 (2 << BR_DECC_SHIFT) |	/* Use HW ECC */ \
+				/* (2 << BR_DECC_SHIFT) |*/	/* Use HW ECC */ \
 				 BR_PS_8 |		/* Port Size = 8 bit */ \
 				 BR_MS_FCM |		/* MSEL = FCM */ \
 				 BR_V)			/* valid */

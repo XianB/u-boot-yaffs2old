@@ -27,12 +27,12 @@ const char *yaffs_mtdif_c_version =
 #include "linux/time.h"
 #include "linux/mtd/nand.h"
 
-//#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18))
-#if 1
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18))
 static struct nand_oobinfo yaffs_oobinfo = {
 	.useecc = 1,
 	.eccbytes = 6,
-	.eccpos = {8, 9, 10, 13, 14, 15}
+	.eccpos = {8, 9, 10, 13, 14, 15},
+	.oobfree = { {0,8}, {11,2} }
 };
 
 static struct nand_oobinfo yaffs_noeccinfo = {
@@ -40,8 +40,7 @@ static struct nand_oobinfo yaffs_noeccinfo = {
 };
 #endif
 
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 1
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 static inline void translate_spare2oob(const yaffs_Spare *spare, __u8 *oob)
 {
 	oob[0] = spare->tagByte0;
@@ -80,16 +79,14 @@ int nandmtd_WriteChunkToNAND(yaffs_Device * dev, int chunkInNAND,
 			     const __u8 * data, const yaffs_Spare * spare)
 {
 	struct mtd_info *mtd = (struct mtd_info *)(dev->genericDevice);
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 0
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 	struct mtd_oob_ops ops;
 #endif
 	size_t dummy;
 	int retval = 0;
 
 	loff_t addr = ((loff_t) chunkInNAND) * dev->nDataBytesPerChunk;
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 0
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 	__u8 spareAsBytes[8]; /* OOB */
 
 	if (data && !spare)
@@ -146,16 +143,14 @@ int nandmtd_ReadChunkFromNAND(yaffs_Device * dev, int chunkInNAND, __u8 * data,
 			      yaffs_Spare * spare)
 {
 	struct mtd_info *mtd = (struct mtd_info *)(dev->genericDevice);
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 0
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 	struct mtd_oob_ops ops;
 #endif
 	size_t dummy;
 	int retval = 0;
 
 	loff_t addr = ((loff_t) chunkInNAND) * dev->nDataBytesPerChunk;
-//#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
-#if 0
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17))
 	__u8 spareAsBytes[8]; /* OOB */
 
 	if (data && !spare)

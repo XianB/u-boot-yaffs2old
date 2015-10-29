@@ -17,6 +17,10 @@
 #ifndef __YPORTENV_H__
 #define __YPORTENV_H__
 
+#define KERNEL_VERSION(a,b,c)	(((a) << 16) + ((b) << 8) + (c))
+
+
+
 /* XXX U-BOOT XXX */
 #ifndef CONFIG_YAFFS_DIRECT
 #define CONFIG_YAFFS_DIRECT

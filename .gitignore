@@ -1,0 +1,6 @@
+*.[oa]
+tags
+cscope.out
+*.depend
+u-boot*
+*.map
