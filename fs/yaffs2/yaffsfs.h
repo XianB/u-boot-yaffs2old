@@ -1,22 +1,7 @@
 /*
- * YAFFS: Yet another Flash File System . A NAND-flash specific file system.
- *
- * Copyright (C) 2002-2007 Aleph One Ltd.
- *   for Toby Churchill Ltd and Brightstar Engineering
- *
- * Created by Charles Manning <charles@aleph1.co.uk>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 2.1 as
- * published by the Free Software Foundation.
- *
- * Note: Only YAFFS headers are LGPL, YAFFS C code is covered by GPL.
- */
-
-/*
- * Header file for using yaffs in an application via
- * a direct interface.
- */
+* Header file for using yaffs in an application via
+* a direct interface.
+*/
 
 
 #ifndef __YAFFSFS_H__
@@ -47,7 +32,7 @@
 #define O_RDWR		02
 #endif
 
-#ifndef O_CREAT
+#ifndef O_CREAT		
 #define O_CREAT 	0100
 #endif
 
@@ -95,7 +80,7 @@
 #define EACCESS	13
 #endif
 
-#ifndef EXDEV
+#ifndef EXDEV	
 #define EXDEV	18
 #endif
 
@@ -146,7 +131,7 @@
 #define S_IFREG		0100000
 #endif
 
-#ifndef S_IREAD
+#ifndef S_IREAD 
 #define S_IREAD		0000400
 #endif
 
@@ -162,7 +147,6 @@ struct yaffs_dirent{
     off_t d_off;                /* offset to this dirent */
     unsigned short d_reclen;    /* length of this d_name */
     char d_name [NAME_MAX+1];   /* file name (null-terminated) */
-    unsigned d_dont_use;	/* debug pointer, not for public consumption */
 };
 
 typedef struct yaffs_dirent yaffs_dirent;
@@ -193,7 +177,7 @@ int yaffs_read(int fd, void *buf, unsigned int nbyte) ;
 int yaffs_write(int fd, const void *buf, unsigned int nbyte) ;
 int yaffs_close(int fd) ;
 off_t yaffs_lseek(int fd, off_t offset, int whence) ;
-int yaffs_truncate(int fd, off_t newSize);
+int yaffs_truncate(int fd, unsigned int newSize);
 
 int yaffs_unlink(const char *path) ;
 int yaffs_rename(const char *oldPath, const char *newPath) ;
@@ -202,8 +186,8 @@ int yaffs_stat(const char *path, struct yaffs_stat *buf) ;
 int yaffs_lstat(const char *path, struct yaffs_stat *buf) ;
 int yaffs_fstat(int fd, struct yaffs_stat *buf) ;
 
-int yaffs_chmod(const char *path, mode_t mode);
-int yaffs_fchmod(int fd, mode_t mode);
+int yaffs_chmod(const char *path, mode_t mode); 
+int yaffs_fchmod(int fd, mode_t mode); 
 
 int yaffs_mkdir(const char *path, mode_t mode) ;
 int yaffs_rmdir(const char *path) ;
@@ -216,16 +200,18 @@ int yaffs_closedir(yaffs_DIR *dirp) ;
 int yaffs_mount(const char *path) ;
 int yaffs_unmount(const char *path) ;
 
-int yaffs_symlink(const char *oldpath, const char *newpath);
-int yaffs_readlink(const char *path, char *buf, int bufsiz);
+int yaffs_symlink(const char *oldpath, const char *newpath); 
+int yaffs_readlink(const char *path, char *buf, int bufsiz); 
 
-int yaffs_link(const char *oldpath, const char *newpath);
+int yaffs_link(const char *oldpath, const char *newpath); 
 int yaffs_mknod(const char *pathname, mode_t mode, dev_t dev);
 
-loff_t yaffs_freespace(const char *path);
+off_t yaffs_freespace(const char *path);
 
 void yaffs_initialise(yaffsfs_DeviceConfiguration *configList);
 
 int yaffs_StartUp(void);
 
 #endif
+
+

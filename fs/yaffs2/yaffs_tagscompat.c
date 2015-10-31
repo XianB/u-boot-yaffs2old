@@ -1,18 +1,17 @@
 /*
- * YAFFS: Yet Another Flash File System. A NAND-flash specific file system.
+ * YAFFS: Yet another FFS. A NAND-flash specific file system. 
+ * yaffs_tagscompat.h: Tags compatability layer to use YAFFS1 formatted NAND.
  *
- * Copyright (C) 2002-2007 Aleph One Ltd.
- *   for Toby Churchill Ltd and Brightstar Engineering
+ * Copyright (C) 2002 Aleph One Ltd.
  *
  * Created by Charles Manning <charles@aleph1.co.uk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
+ *
+ * $Id: yaffs_tagscompat.c,v 1.8 2005/11/29 20:54:32 marty Exp $
  */
-
-/* XXX U-BOOT XXX */
-#include <common.h>
 
 #include "yaffs_guts.h"
 #include "yaffs_tagscompat.h"
@@ -48,7 +47,7 @@ static const char yaffs_countBitsTable[256] = {
 	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
 };
 
-int yaffs_CountBits(__u8 x)
+static int yaffs_CountBits(__u8 x)
 {
 	int retVal;
 	retVal = yaffs_countBitsTable[x];
@@ -136,8 +135,9 @@ static void yaffs_LoadTagsIntoSpare(yaffs_Spare * sparePtr,
 }
 
 static void yaffs_GetTagsFromSpare(yaffs_Device * dev, yaffs_Spare * sparePtr,
-				   yaffs_TagsUnion *tu)
+				   yaffs_Tags * tagsPtr)
 {
+	yaffs_TagsUnion *tu = (yaffs_TagsUnion *) tagsPtr;
 	int result;
 
 	tu->asBytes[0] = sparePtr->tagByte0;
@@ -149,7 +149,7 @@ static void yaffs_GetTagsFromSpare(yaffs_Device * dev, yaffs_Spare * sparePtr,
 	tu->asBytes[6] = sparePtr->tagByte6;
 	tu->asBytes[7] = sparePtr->tagByte7;
 
-	result = yaffs_CheckECCOnTags(&tu->asTags);
+	result = yaffs_CheckECCOnTags(tagsPtr);
 	if (result > 0) {
 		dev->tagsEccFixed++;
 	} else if (result < 0) {
@@ -436,7 +436,7 @@ int yaffs_TagsCompatabilityReadChunkWithTagsFromNAND(yaffs_Device * dev,
 {
 
 	yaffs_Spare spare;
-	yaffs_TagsUnion tags;
+	yaffs_Tags tags;
 	yaffs_ECCResult eccResult;
 
 	static yaffs_Spare spareFF;
@@ -466,10 +466,10 @@ int yaffs_TagsCompatabilityReadChunkWithTagsFromNAND(yaffs_Device * dev,
 			if (eTags->chunkUsed) {
 				yaffs_GetTagsFromSpare(dev, &spare, &tags);
 
-				eTags->objectId = tags.asTags.objectId;
-				eTags->chunkId = tags.asTags.chunkId;
-				eTags->byteCount = tags.asTags.byteCount;
-				eTags->serialNumber = tags.asTags.serialNumber;
+				eTags->objectId = tags.objectId;
+				eTags->chunkId = tags.chunkId;
+				eTags->byteCount = tags.byteCount;
+				eTags->serialNumber = tags.serialNumber;
 			}
 		}
 
