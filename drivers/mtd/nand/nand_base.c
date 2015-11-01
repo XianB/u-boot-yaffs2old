@@ -97,7 +97,7 @@ static struct nand_oobinfo nand_oob_8 = {
 };
 
 static struct nand_oobinfo nand_oob_16 = {
-	.useecc = MTD_NANDECC_AUTOPLACE,
+	.useecc = MTD_NANDECC_PLACE,
 	.eccbytes = 6,
 	.eccpos = {8, 9, 10, 13, 14, 15},
 	.oobfree = { {0, 8}, {11, 2}}

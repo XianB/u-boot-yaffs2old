@@ -269,7 +269,8 @@ static struct nand_oobinfo jffs2_oobinfo = {
 static struct nand_oobinfo yaffs_oobinfo = {
 	.useecc = MTD_NANDECC_PLACE,
 	.eccbytes = 6,
-	.eccpos = { 8, 9, 10, 13, 14, 15}
+	.eccpos = { 8, 9, 10, 13, 14, 15},
+	.oobfree = { {0, 8}, {11, 2}}
 };
 
 static struct nand_oobinfo autoplace_oobinfo = {
