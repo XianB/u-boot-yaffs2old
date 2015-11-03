@@ -26,7 +26,7 @@ static void write_speed_test(int bytes, int buflen);
 void yaffs_read_string(const char *path)
 {
 	int fd = -1;
-	int buf[1000];
+	char buf[1000];
 	int count = 0;
 
 	fd = yaffs_open(path, O_RDWR, S_IREAD | S_IWRITE);
