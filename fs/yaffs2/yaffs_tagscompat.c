@@ -83,7 +83,6 @@ void yaffs_CalcTagsECC(yaffs_Tags * tags)
 	}
 
 	tags->ecc = ecc;
-
 	access_tags(b, 8);
 }
 
@@ -93,9 +92,7 @@ int yaffs_CheckECCOnTags(yaffs_Tags * tags)
 
 	yaffs_CalcTagsECC(tags);
 
-
 	ecc ^= tags->ecc;
-
 
 	if (ecc && ecc <= 64) {
 		/* TODO: Handle the failure better. Retire? */
@@ -153,8 +150,7 @@ static void yaffs_GetTagsFromSpare(yaffs_Device * dev, yaffs_Spare * sparePtr,
 	tu->asBytes[7] = sparePtr->tagByte7;
 
 	result = yaffs_CheckECCOnTags(tagsPtr);
-//	modified by xianb 
-//	result = 0;
+
 	if (result > 0) {
 		dev->tagsEccFixed++;
 	} else if (result < 0) {
@@ -469,15 +465,10 @@ int yaffs_TagsCompatabilityReadChunkWithTagsFromNAND(yaffs_Device * dev,
 			     0) ? 1 : 0;
 
 			if (eTags->chunkUsed) {
-
-				printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-				print_info(&spare, 16);
 				yaffs_GetTagsFromSpare(dev, &spare, &tags);
 
 				eTags->objectId = tags.objectId;
 				eTags->chunkId = tags.chunkId;
-				printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-				printf("objectID: %d\n", eTags->objectId);
 				eTags->byteCount = tags.byteCount;
 				eTags->serialNumber = tags.serialNumber;
 			}
@@ -541,11 +532,10 @@ int yaffs_TagsCompatabilityQueryNANDBlock(struct yaffs_DeviceStruct *dev,
 	return YAFFS_OK;
 }
 
-
 void access_tags(char *tags, int len)
 {
-	int t = 0;
+    int t = 0;
 	for(t = 0; t < 8; t++) {
 		char tb = tags[t];
 	}
-}
+}   
