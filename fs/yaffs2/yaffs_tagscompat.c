@@ -149,7 +149,9 @@ static void yaffs_GetTagsFromSpare(yaffs_Device * dev, yaffs_Spare * sparePtr,
 	tu->asBytes[6] = sparePtr->tagByte6;
 	tu->asBytes[7] = sparePtr->tagByte7;
 
-	result = yaffs_CheckECCOnTags(tagsPtr);
+//	result = yaffs_CheckECCOnTags(tagsPtr);
+//	modified by xianb 
+	result = 0;
 	if (result > 0) {
 		dev->tagsEccFixed++;
 	} else if (result < 0) {

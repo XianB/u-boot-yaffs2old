@@ -21,7 +21,7 @@
 #include "malloc.h"
 #endif
 
-unsigned yaffs_traceMask = 0xFFFFFFFF;
+unsigned yaffs_traceMask = 0;
 static int errno;
 static int isMounted = 0;
 extern nand_info_t nand_info[];
@@ -82,7 +82,6 @@ static yaffs_Device flashDev;
 #define MOUNT_POINT "/flash"
 
 static yaffsfs_DeviceConfiguration yaffsfs_config[] = {
-
 //	{ "/ram", &ramDev},
 //	{ "/boot", &bootDev},
 	{ "/flash", &flashDev},
@@ -271,6 +270,7 @@ void cmd_yaffs_ls(const char *mountpt, int longlist)
 	checkMount();
 	d = yaffs_opendir(mountpt);
 
+	longlist = 1;
 	if(!d)
 	{
 		printf("opendir failed\n");
