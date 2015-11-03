@@ -24,7 +24,7 @@ LIB = $(obj)libyaffs2.a
 COBJS-$(CONFIG_YAFFS2) := \
 	yaffscfg.o yaffs_ecc.o yaffsfs.o yaffs_guts.o yaffs_packedtags1.o \
 	yaffs_tagscompat.o yaffs_packedtags2.o yaffs_tagsvalidity.o \
-	yaffs_mtdif.o \
+	yaffs_mtdif.o yaffs_function_test.o \
 	yaffs_mtdif2.o
 
 SRCS    := $(COBJS-y:.o=.c)
