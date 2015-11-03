@@ -1,7 +1,9 @@
 /*
- * YAFFS: Yet another Flash File System . A NAND-flash specific file system.
+ * YAFFS: Yet another FFS. A NAND-flash specific file system. 
+ * yportenv.h: Portable services used by yaffs. This is done to allow
+ * simple migration from kernel space into app space for testing.
  *
- * Copyright (C) 2002-2007 Aleph One Ltd.
+ * Copyright (C) 2002 Aleph One Ltd.
  *   for Toby Churchill Ltd and Brightstar Engineering
  *
  * Created by Charles Manning <charles@aleph1.co.uk>
@@ -10,45 +12,42 @@
  * it under the terms of the GNU Lesser General Public License version 2.1 as
  * published by the Free Software Foundation.
  *
+ *
  * Note: Only YAFFS headers are LGPL, YAFFS C code is covered by GPL.
+ *
+ * $Id: yportenv.h,v 1.9 2005/10/07 02:46:50 charles Exp $
+ *
  */
-
 
 #ifndef __YPORTENV_H__
 #define __YPORTENV_H__
+#undef __KERNEL__
 
-/* XXX U-BOOT XXX */
-#ifndef CONFIG_YAFFS_DIRECT
+#define KERNEL_VERSION(a,b,c)  (((a) << 16) + ((b) << 8) + (c))
 #define CONFIG_YAFFS_DIRECT
+
+#ifndef NULL
+#define NULL ((void *)0)
 #endif
 
-#if defined CONFIG_YAFFS_WINCE
 
+
+#if defined CONFIG_YAFFS_WINCE
 #include "ywinceenv.h"
 
-/* XXX U-BOOT XXX */
-#elif  0 /* defined __KERNEL__ */
+#elif  defined __KERNEL__
 
 #include "moduleconfig.h"
 
 /* Linux kernel */
-#include <linux/version.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19))
 #include <linux/config.h>
-#endif
-#include <linux/kernel.h>
-#include <linux/mm.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/slab.h>
-#include <linux/vmalloc.h>
 
 #define YCHAR char
 #define YUCHAR unsigned char
 #define _Y(x)     x
 #define yaffs_strcpy(a,b)    strcpy(a,b)
 #define yaffs_strncpy(a,b,c) strncpy(a,b,c)
-#define yaffs_strncmp(a,b,c) strncmp(a,b,c)
 #define yaffs_strlen(s)	     strlen(s)
 #define yaffs_sprintf	     sprintf
 #define yaffs_toupper(a)     toupper(a)
@@ -63,12 +62,8 @@
 #define YFREE(x)   kfree(x)
 #define YMALLOC_ALT(x) vmalloc(x)
 #define YFREE_ALT(x)   vfree(x)
-#define YMALLOC_DMA(x) YMALLOC(x)
 
-// KR - added for use in scan so processes aren't blocked indefinitely.
-#define YYIELD() schedule()
-
-#define YAFFS_ROOT_MODE			0666
+#define YAFFS_ROOT_MODE				0666
 #define YAFFS_LOSTNFOUND_MODE		0666
 
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0))
@@ -85,14 +80,6 @@
 #define TENDSTR "\n"
 #define TSTR(x) KERN_WARNING x
 #define TOUT(p) printk p
-
-#define yaffs_trace(mask, fmt, args...) \
-	do { if ((mask) & (yaffs_traceMask|YAFFS_TRACE_ERROR)) \
-		printk(KERN_WARNING "yaffs: " fmt, ## args); \
-	} while (0)
-
-#define compile_time_assertion(assertion) \
-	({ int x = __builtin_choose_expr(assertion, 0, (void)0); (void) x; })
 
 #elif defined CONFIG_YAFFS_DIRECT
 
@@ -148,15 +135,9 @@
 
 #endif
 
-/* see yaffs_fs.c */
-extern unsigned int yaffs_traceMask;
-extern unsigned int yaffs_wr_attempts;
+extern unsigned yaffs_traceMask;
 
-/*
- * Tracing flags.
- * The flags masked in YAFFS_TRACE_ALWAYS are always traced.
- */
-
+#define YAFFS_TRACE_ERROR		0x00000001
 #define YAFFS_TRACE_OS			0x00000002
 #define YAFFS_TRACE_ALLOCATE		0x00000004
 #define YAFFS_TRACE_SCAN		0x00000008
@@ -171,20 +152,10 @@ extern unsigned int yaffs_wr_attempts;
 #define YAFFS_TRACE_GC_DETAIL		0x00001000
 #define YAFFS_TRACE_SCAN_DEBUG		0x00002000
 #define YAFFS_TRACE_MTD			0x00004000
-#define YAFFS_TRACE_CHECKPOINT		0x00008000
-
-#define YAFFS_TRACE_VERIFY		0x00010000
-#define YAFFS_TRACE_VERIFY_NAND		0x00020000
-#define YAFFS_TRACE_VERIFY_FULL		0x00040000
-#define YAFFS_TRACE_VERIFY_ALL		0x000F0000
-
-
-#define YAFFS_TRACE_ERROR		0x40000000
+#define YAFFS_TRACE_ALWAYS		0x40000000
 #define YAFFS_TRACE_BUG			0x80000000
-#define YAFFS_TRACE_ALWAYS		0xF0000000
 
-
-#define T(mask,p) do{ if((mask) & (yaffs_traceMask | YAFFS_TRACE_ALWAYS)) TOUT(p);} while(0)
+#define T(mask,p) do{ if((mask) & (yaffs_traceMask | YAFFS_TRACE_ERROR)) TOUT(p);} while(0)
 
 #ifndef CONFIG_YAFFS_WINCE
 #define YBUG() T(YAFFS_TRACE_BUG,(TSTR("==>> yaffs bug: " __FILE__ " %d" TENDSTR),__LINE__))

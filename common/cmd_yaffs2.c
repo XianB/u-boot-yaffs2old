@@ -24,6 +24,47 @@ extern void cmd_yaffs_mv(const char *oldPath, const char *newPath);
 extern int yaffs_DumpDevStruct(const char *path);
 
 
+
+extern off_t yaffs_freespace(const char *path);
+extern void run_test(int testcase, int bytes, int buflen);
+extern void yaffs_write_string(const char *path, const char * str);
+extern void yaffs_read_string(const char *path);
+
+int do_yrds (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+    char *filename = argv[1];
+
+    yaffs_read_string(filename);
+
+    return(0);
+}
+
+void do_ywrs(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+	char *filename = argv[1];
+	char * string = argv[2];
+
+    yaffs_write_string(filename, string);
+
+    return(0);
+}
+
+int do_yruntest (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+    int testcase = simple_strtoul(argv[1], NULL, 10);
+    int bytes = simple_strtoul(argv[2], NULL, 10);
+    int buflen = simple_strtoul(argv[3], NULL, 10);
+	run_test(testcase, bytes, buflen);
+}
+
+int do_yfreespace (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+	char *dirname = argv[1];
+	off_t fs = yaffs_freespace(dirname);
+	printf("freespace of %s: %ld bytes\n", dirname, fs);
+    return 0;
+}
+
 int do_ymount (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
     char *mtpoint = argv[1];
@@ -211,3 +252,30 @@ U_BOOT_CMD(
     "YAFFS device struct",
     "dirname"
 );
+
+
+U_BOOT_CMD(
+    yfreespace,    2,  0,  do_yfreespace,
+    "get freespace",
+    "mount point"
+);
+
+U_BOOT_CMD(
+    yruntest,    4,  0,  do_yruntest,
+    "runtest",
+    "testcase"
+);
+
+U_BOOT_CMD(
+    ywrs,    3,  0,  do_ywrs,
+    "write string to file",
+    "path string"
+);
+
+
+U_BOOT_CMD(
+    yrds,    2,  0,  do_yrds,
+    "read string file from yaffs",
+    "filename"
+);
+

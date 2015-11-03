@@ -1,18 +1,17 @@
 /*
- * YAFFS: Yet Another Flash File System. A NAND-flash specific file system.
+ * YAFFS: Yet another FFS. A NAND-flash specific file system. 
  *
- * Copyright (C) 2002-2007 Aleph One Ltd.
- *   for Toby Churchill Ltd and Brightstar Engineering
+ * yaffs_packedtags2.c: Tags packing for YAFFS2
+ *
+ * Copyright (C) 2002 Aleph One Ltd.
  *
  * Created by Charles Manning <charles@aleph1.co.uk>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
  */
-
-/* XXX U-BOOT XXX */
-#include <common.h>
 
 #include "yaffs_packedtags2.h"
 #include "yportenv.h"
@@ -115,34 +114,20 @@ void yaffs_UnpackTags2(yaffs_ExtendedTags * t, yaffs_PackedTags2 * pt)
 		/* Page is in use */
 #ifdef YAFFS_IGNORE_TAGS_ECC
 		{
-			t->eccResult = YAFFS_ECC_RESULT_NO_ERROR;
+			t->eccResult = 0;
 		}
 #else
 		{
 			yaffs_ECCOther ecc;
-			int result;
 			yaffs_ECCCalculateOther((unsigned char *)&pt->t,
 						sizeof
 						(yaffs_PackedTags2TagsPart),
 						&ecc);
-			result =
+			t->eccResult =
 			    yaffs_ECCCorrectOther((unsigned char *)&pt->t,
 						  sizeof
 						  (yaffs_PackedTags2TagsPart),
 						  &pt->ecc, &ecc);
-			switch(result){
-				case 0:
-					t->eccResult = YAFFS_ECC_RESULT_NO_ERROR;
-					break;
-				case 1:
-					t->eccResult = YAFFS_ECC_RESULT_FIXED;
-					break;
-				case -1:
-					t->eccResult = YAFFS_ECC_RESULT_UNFIXED;
-					break;
-				default:
-					t->eccResult = YAFFS_ECC_RESULT_UNKNOWN;
-			}
 		}
 #endif
 		t->blockBad = 0;

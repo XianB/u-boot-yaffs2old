@@ -1,7 +1,8 @@
 /*
- * YAFFS: Yet another Flash File System . A NAND-flash specific file system.
+ * YAFFS: Yet another FFS. A NAND-flash specific file system. 
+ * ydirectenv.h: Environment wrappers for direct.
  *
- * Copyright (C) 2002-2007 Aleph One Ltd.
+ * Copyright (C) 2002 Aleph One Ltd.
  *   for Toby Churchill Ltd and Brightstar Engineering
  *
  * Created by Charles Manning <charles@aleph1.co.uk>
@@ -10,59 +11,40 @@
  * it under the terms of the GNU Lesser General Public License version 2.1 as
  * published by the Free Software Foundation.
  *
+ *
  * Note: Only YAFFS headers are LGPL, YAFFS C code is covered by GPL.
+ *
+ * $Id: ydirectenv.h,v 1.2 2005/10/07 03:48:50 charles Exp $
+ *
  */
-
-/*
- * ydirectenv.h: Environment wrappers for YAFFS direct.
- */
-
+ 
 #ifndef __YDIRECTENV_H__
 #define __YDIRECTENV_H__
 
-/* Direct interface */
+// Direct interface
 
 #include "devextras.h"
 
-/* XXX U-BOOT XXX */
-#if 0
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
-#include "assert.h"
-#endif
-
-/* XXX U-BOOT XXX */
-#if 0
-#define YBUG() assert(1)
-#endif
+//#include "stdlib.h"
+//#include "stdio.h"
+//#include "string.h"
 
 #define YCHAR char
 #define YUCHAR unsigned char
 #define _Y(x) x
 #define yaffs_strcpy(a,b)    strcpy(a,b)
 #define yaffs_strncpy(a,b,c) strncpy(a,b,c)
-#define yaffs_strncmp(a,b,c) strncmp(a,b,c)
 #define yaffs_strlen(s)	     strlen(s)
 #define yaffs_sprintf	     sprintf
 #define yaffs_toupper(a)     toupper(a)
 
-#ifdef NO_Y_INLINE
-#define Y_INLINE
-#else
 #define Y_INLINE inline
-#endif
-
-#define YMALLOC(x) yaffs_malloc(x)
-#define YFREE(x)   yaffs_free(x)
-#define YMALLOC_ALT(x) yaffs_malloc(x)
-#define YFREE_ALT(x)   yaffs_free(x)
-
-#define YMALLOC_DMA(x) yaffs_malloc(x)
-
-#define YYIELD()  do {} while(0)
 
 
+#define YMALLOC(x) malloc(x)
+#define YFREE(x)   free(x)
+#define YMALLOC_ALT(x) malloc(x)
+#define YFREE_ALT(x)   free(x)
 
 
 //#define YINFO(s) YPRINTF(( __FILE__ " %d %s\n",__LINE__,s))
@@ -90,3 +72,5 @@
 #define yaffs_strcmp(a,b) strcmp(a,b)
 
 #endif
+
+
