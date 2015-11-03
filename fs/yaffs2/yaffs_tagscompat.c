@@ -83,26 +83,19 @@ void yaffs_CalcTagsECC(yaffs_Tags * tags)
 	}
 
 	tags->ecc = ecc;
-	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-	printf("in yaffs_CalcTagsECC:%d\n", ecc);
-	print_info(b, 8);
+
+	access_tags(b, 8);
 }
 
 int yaffs_CheckECCOnTags(yaffs_Tags * tags)
 {
 	unsigned ecc = tags->ecc;
 
-	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-	printf("ecc: %d\n", ecc);
 	yaffs_CalcTagsECC(tags);
 
-	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-	printf("ecc: %d tags->ecc: %d\n",ecc, tags->ecc);
 
 	ecc ^= tags->ecc;
 
-	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-	printf("ecc: %d\n", ecc);
 
 	if (ecc && ecc <= 64) {
 		/* TODO: Handle the failure better. Retire? */
@@ -159,8 +152,6 @@ static void yaffs_GetTagsFromSpare(yaffs_Device * dev, yaffs_Spare * sparePtr,
 	tu->asBytes[6] = sparePtr->tagByte6;
 	tu->asBytes[7] = sparePtr->tagByte7;
 
-	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
-	print_info(tu->asBytes, 8);
 	result = yaffs_CheckECCOnTags(tagsPtr);
 //	modified by xianb 
 //	result = 0;
@@ -550,14 +541,11 @@ int yaffs_TagsCompatabilityQueryNANDBlock(struct yaffs_DeviceStruct *dev,
 	return YAFFS_OK;
 }
 
-void print_info(char * buf, int len)
+
+void access_tags(char *tags, int len)
 {
-	int i = 0;
-	for (i = 0 ; i < len; i++) {
-		printf("%x ", buf[i]);
-		if (i % 31 == 0) {
-			printf("\n");
-		}
+	int t = 0;
+	for(t = 0; t < 8; t++) {
+		char tb = tags[t];
 	}
-	printf("\n");
 }
