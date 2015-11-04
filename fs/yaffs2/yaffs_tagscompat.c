@@ -84,8 +84,10 @@ void yaffs_CalcTagsECC(yaffs_Tags * tags)
 
 	tags->ecc = ecc;
 	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
+	printf("ecc: %x, tags->ecc: %x\n", ecc, tags->ecc);
+	printf("FILE: %s, LINE: %d\n", __FILE__, __LINE__);
 	printf("before print_info ----in yaffs_CalcTagsECC:%d\n", tags->ecc);
-	//print_info(b, 8);
+	print_info(b, 8);
 	//yaffs_Tags tt = ((yaffs_TagsUnion *) tags)->asTags;
 	//unsigned char *tb = ((yaffs_TagsUnion *) tags)->asBytes;
 	//printf("print_info() do nothing thing.but change mode of tags from asbytes to astags\n");
